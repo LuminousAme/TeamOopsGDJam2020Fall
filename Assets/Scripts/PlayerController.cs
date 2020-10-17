@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
 
 
     //reference to our camera (needed to convert mouse coordinates to world space)
-    public Camera cam; 
+    public GameObject cam; 
     //position of the mouse
     private Vector2 mousePos;
     //transform of the crosshair 
@@ -20,6 +20,10 @@ public class PlayerController : MonoBehaviour
     public GameObject bulletPrefab;
     //the transform for the gun, this is needed for the rotation
     public Transform gunTrans;
+    //gameobject with the particle system for when the gun fires
+    public GameObject fireParticles;
+    //gameobject with the gun sprite 
+    public GameObject gunSprite;
 
 
     //called when the program first starts
@@ -86,7 +90,7 @@ public class PlayerController : MonoBehaviour
     {
         //player aiming and shooting
         //get the mouse position in world coordinates
-        mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+        mousePos = cam.GetComponent<Camera>().ScreenToWorldPoint(Input.mousePosition);
         crosshair.transform.position = mousePos;
     }
 
@@ -101,5 +105,29 @@ public class PlayerController : MonoBehaviour
         NewBullet.GetComponent<BulletMovement>().onFire(BulletDir);
         //delete the bullet after a second
         Destroy(NewBullet, 1);
+
+        //set the rotation of the particle effect and gun sprite to be facing the same way as the bullet
+        float particleRot = Vector2.Angle(new Vector2(0.0f, -1.0f), BulletDir);
+        if (BulletDir.x > 0) particleRot *= -1;
+        var particleShape = fireParticles.GetComponent<ParticleSystem>().shape;
+        particleShape.rotation = new Vector3(0, particleRot, 0);
+        //rotate the gun sprite
+        if (BulletDir.x > 0)
+        {
+            //make sure the x is not flipped 
+            gunSprite.GetComponent<SpriteRenderer>().flipX = false;
+            gunSprite.transform.rotation = Quaternion.Euler(0.0f, 0.0f, Vector2.Angle(new Vector2(0.0f, -1.0f), BulletDir) - 90.0f); 
+        }
+        else
+        {
+            //flip the x 
+            gunSprite.GetComponent<SpriteRenderer>().flipX = true;
+            gunSprite.transform.rotation = Quaternion.Euler(0.0f, 0.0f, Vector2.Angle(new Vector2(0.0f, 1.0f), BulletDir) - 90.0f);
+        }
+        fireParticles.transform.position = gunSprite.transform.position;
+        //play the particle effect
+        fireParticles.GetComponent<ParticleSystem>().Play();
+        //trigger a small short screenshake
+        cam.GetComponent<ScreenShake>().TriggerShake(0.2f, 0.025f);
     }
 }
