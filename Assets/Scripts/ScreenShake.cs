@@ -21,7 +21,7 @@ public class ScreenShake : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GameManage.GetState() == 1)
+        if(GameManage.GetState() == 1 && !GameManage.isOver)
         {
             if (ShakeDur > 0.0f)
             {

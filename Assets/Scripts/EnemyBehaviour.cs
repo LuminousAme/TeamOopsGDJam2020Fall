@@ -60,7 +60,7 @@ public class EnemyBehaviour : MonoBehaviour
     void Update()
     {
         //check if the enemy is dead
-        if(hp <= 0 && GameManage.GetState() == 1)
+        if(hp <= 0 && GameManage.GetState() == 1 && !GameManage.isOver)
         {
             //check if the enemy still has box colliders, remove them if it does, we need to do this so the player doesn't take damage from dying enemies
             Component[] colliders;
@@ -91,7 +91,7 @@ public class EnemyBehaviour : MonoBehaviour
             }
         }
         //if it isn't run other logic 
-        else if (GameManage.GetState() == 1)
+        else if (GameManage.GetState() == 1 && !GameManage.isOver)
         {
             //check if it is within 3 units of the player 
             if(Vector3.Distance(transform.position, playerTrans.position) < 3.0f)

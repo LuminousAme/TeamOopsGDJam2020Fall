@@ -22,7 +22,7 @@ public class Healthbar : MonoBehaviour
 
     private void Update()
     {
-        if(GameManage.GetState() == 1)
+        if(GameManage.GetState() == 1 && !GameManage.isOver)
         {
             //check if the bar should be flashing
             if (FlashTime > 0.0f)

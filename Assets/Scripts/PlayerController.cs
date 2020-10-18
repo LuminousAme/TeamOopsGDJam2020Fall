@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -54,6 +55,14 @@ public class PlayerController : MonoBehaviour
     public AudioSource scoreUpSFX;
     //sound effect when you dig up treasure
     public AudioSource treasureFoundSFX;
+
+    //variable representing the pop up text telling the player how to get points
+    public Text pointPrompt;
+
+    //control player animator 
+    public Animator animator;
+    //control the player's sprite renderer
+    public SpriteRenderer playerSprite;
     
 
     //called when the program first starts
@@ -73,7 +82,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //if the player is alive run their logic
-        if(hp > 0 && GameManage.GetState() == 1)
+        if(hp > 0 && GameManage.GetState() == 1 && !GameManage.isOver)
         {
             //run player movement
             PlayerMove();
@@ -87,9 +96,17 @@ public class PlayerController : MonoBehaviour
                 //if they have, fire a bullet 
                 FireBullet();
             }
+
+            //if the prompt for getting points is still visible slowly fade it 
+            if(pointPrompt.color.a > 0.0f)
+            {
+                Color promptCol = pointPrompt.color;
+                promptCol.a -= Time.deltaTime / 5;
+                pointPrompt.color = promptCol;
+            }
         }
         //else, end the game
-        else if (GameManage.GetState() == 1)
+        else if (GameManage.GetState() == 1 && !GameManage.isOver)
         {
             //set the game to be over
             FindObjectOfType<GameManage>().GameOver();
@@ -97,6 +114,8 @@ public class PlayerController : MonoBehaviour
             gameOverSFX.Play();
             //stop playing main soundtrack
             cam.GetComponent<AudioSource>().Stop();
+            //stop playing animation
+            animator.SetBool("GameOver", true);
         }
     }
 
@@ -144,6 +163,14 @@ public class PlayerController : MonoBehaviour
 
         //move the player
         transform.Translate(velocity * speed * Time.deltaTime);
+        //set the parameters of the animator controller
+        animator.SetFloat("Xspeed", Mathf.Abs(velocity.x));
+        animator.SetFloat("Yspeed", velocity.y);
+        //flip the player's x 
+        if (velocity.x < 0f)
+            playerSprite.flipX = true;
+        else
+            playerSprite.flipX = false;
     }
 
     //function to set the crosshair position the player is aiming at
@@ -198,7 +225,7 @@ public class PlayerController : MonoBehaviour
     //calls when a trigger collision begins
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if(GameManage.GetState() == 1)
+        if(GameManage.GetState() == 1 && !GameManage.isOver)
         {
             //check if it's an enemy that the player has collided with
             if (collider.tag == "Enemy")
@@ -249,7 +276,7 @@ public class PlayerController : MonoBehaviour
     //called when the player leaves a trigger box
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if(GameManage.GetState() == 1)
+        if(GameManage.GetState() == 1 && !GameManage.isOver)
         {
             //check to see if it's the treasure spot the player is colliding with
             if (collision.tag == "TreasureSpot")
@@ -268,6 +295,14 @@ public class PlayerController : MonoBehaviour
                     particleEffect.GetComponent<ParticleSystem>().Play();
                     //and play the sound effect
                     treasureFoundSFX.Play();
+
+                    //if the player doesn't have any points yet, tell them how to get points
+                    if(ScoreScript.score == 0)
+                    {
+                        Color promptCol = pointPrompt.color;
+                        promptCol.a = 1.0f;
+                        pointPrompt.color = promptCol;
+                    }
                 }
             }
         }

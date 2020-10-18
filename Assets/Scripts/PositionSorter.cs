@@ -24,7 +24,7 @@ public class PositionSorter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GameManage.GetState() == 1)
+        if(GameManage.GetState() == 1 && !GameManage.isOver)
         {
             //calculate the order in layer value for the attached object based on y-value
             thisObjectsRenderer.sortingOrder = (int)(orderBase - transform.position.y * 10.0f - yOffset * 10.0f);

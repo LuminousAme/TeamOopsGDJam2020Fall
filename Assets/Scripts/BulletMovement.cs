@@ -26,7 +26,7 @@ public class BulletMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GameManage.GetState() == 1)
+        if(GameManage.GetState() == 1 && !GameManage.isOver)
         {
             //move the bullet in that direction
             transform.position += dir * speed * Time.deltaTime;

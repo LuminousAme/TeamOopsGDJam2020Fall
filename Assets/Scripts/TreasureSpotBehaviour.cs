@@ -80,12 +80,6 @@ public class TreasureSpotBehaviour : MonoBehaviour
         GameObject.Find("BuriedTreasure").GetComponent<Transform>().position = transform.position;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     //function to calculate a point on a catmull rom curve, used to position the spawning of treasure
     public static Vector3 Catmull(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
     {
