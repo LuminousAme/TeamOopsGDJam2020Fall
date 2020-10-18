@@ -52,6 +52,8 @@ public class PlayerController : MonoBehaviour
     public GameObject treasureFoundParticleSystem;
     //soundeffect when you deliver treasure and get a point
     public AudioSource scoreUpSFX;
+    //sound effect when you dig up treasure
+    public AudioSource treasureFoundSFX;
     
 
     //called when the program first starts
@@ -264,6 +266,8 @@ public class PlayerController : MonoBehaviour
                     GameObject particleEffect = Instantiate(treasureFoundParticleSystem, transform.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
                     //and play it
                     particleEffect.GetComponent<ParticleSystem>().Play();
+                    //and play the sound effect
+                    treasureFoundSFX.Play();
                 }
             }
         }
