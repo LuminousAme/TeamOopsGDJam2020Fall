@@ -11,6 +11,11 @@ public class BulletMovement : MonoBehaviour
     //gameobject with the particle system for when an enemy is hit with a shot
     public GameObject shotParticles;
 
+    private void Start()
+    {
+        gameObject.layer = 9;
+    }
+
     //when the bullet is first fired
     public void onFire(Vector3 shootDir)
     {
@@ -21,21 +26,24 @@ public class BulletMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //move the bullet in that direction
-        transform.position += dir * speed * Time.deltaTime;
-
-        //check if the bullet has hit an enemy (if it's within 1.0f units of an enemy's position)
-        EnemyBehaviour enemy = EnemyBehaviour.GetClosestEnemyWithinRange(transform.position, 0.1f);
-        if (enemy != null)
+        if(GameManage.GetState() == 1)
         {
-            //if it did hit an enemy, damage that enemy
-            enemy.Damage();
-            //create a copy of the particle system at the bullet's position
-            GameObject particleEffect = Instantiate(shotParticles, transform.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
-            //and play it
-            particleEffect.GetComponent<ParticleSystem>().Play();
-            //and destroy the bullet
-            Destroy(gameObject);
+            //move the bullet in that direction
+            transform.position += dir * speed * Time.deltaTime;
+
+            //check if the bullet has hit an enemy (if it's within 1.0f units of an enemy's position)
+            EnemyBehaviour enemy = EnemyBehaviour.GetClosestEnemyWithinRange(transform.position, 0.2f);
+            if (enemy != null)
+            {
+                //if it did hit an enemy, damage that enemy
+                enemy.Damage();
+                //create a copy of the particle system at the bullet's position
+                GameObject particleEffect = Instantiate(shotParticles, transform.position, Quaternion.Euler(0.0f, 0.0f, 0.0f));
+                //and play it
+                particleEffect.GetComponent<ParticleSystem>().Play();
+                //and destroy the bullet
+                Destroy(gameObject);
+            }
         }
     }
 }

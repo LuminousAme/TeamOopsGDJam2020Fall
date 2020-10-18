@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9223003890638173343}
   - component: {fileID: 9223003890638173336}
   - component: {fileID: 5277142650336436700}
+  - component: {fileID: -8143380948699955706}
   m_Layer: 0
   m_Name: Enemy taking shot PS
   m_TagString: Untagged
@@ -4893,3 +4894,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeTime: 0.15
+--- !u!114 &-8143380948699955706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9223003890638173337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b217dcd0d1e4f544bb389831eba031fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orderBase: 10000
+  yOffset: 0
+  movingObject: 1

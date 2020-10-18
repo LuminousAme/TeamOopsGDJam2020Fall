@@ -10,6 +10,12 @@ public class ParticleCleanUp : MonoBehaviour
     //how long the particle system has existed
     private float timeAlive = 0.0f;
 
+    //called before first update
+    void Start()
+    {
+        gameObject.layer = 9;    
+    }
+
     // Update is called once per frame
     void Update()
     {
