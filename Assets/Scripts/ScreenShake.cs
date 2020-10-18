@@ -21,16 +21,19 @@ public class ScreenShake : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(ShakeDur > 0.0f)
+        if(GameManage.GetState() == 1)
         {
-            transform.localPosition = initPos + Random.insideUnitSphere * shakeMag;
+            if (ShakeDur > 0.0f)
+            {
+                transform.localPosition = initPos + Random.insideUnitSphere * shakeMag;
 
-            ShakeDur -= Time.deltaTime;
-        }
-        else
-        {
-            transform.localPosition = initPos;
-            ShakeDur = 0;
+                ShakeDur -= Time.deltaTime;
+            }
+            else
+            {
+                transform.localPosition = new Vector3(0f, 0f, -10f);
+                ShakeDur = 0;
+            }
         }
     }
 
