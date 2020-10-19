@@ -169,7 +169,7 @@ public class PlayerController : MonoBehaviour
         //flip the player's x 
         if (velocity.x < 0f)
             playerSprite.flipX = true;
-        else
+        else if (velocity.x > 0f)
             playerSprite.flipX = false;
     }
 
